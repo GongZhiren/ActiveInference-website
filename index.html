@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Learning Human Habits with Rule-Guided Active Inference</title>
+  <meta name="description" content="ICLR 2026 accepted paper website for rule-guided active inference and wake-sleep habit learning.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="container nav">
+      <a class="brand" href="#top">
+        <span class="brand-mark"></span>
+        <span>Rule-Guided Active Inference</span>
+      </a>
+      <nav>
+        <a href="#abstract">Abstract</a>
+        <a href="#method">Method</a>
+        <a href="#results">Results</a>
+        <a href="#tradeoff">Trade-off</a>
+        <a href="#ablation">Ablation</a>
+        <a href="#cases">Cases</a>
+        <a href="#resources">Resources</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero container">
+      <div class="hero-copy">
+        <p class="pill">ICLR 2026 Accepted</p>
+        <h1>Learning Human Habits with Rule-Guided Active Inference</h1>
+        <p class="subtitle">
+          A biologically inspired wake-sleep framework that unifies world-model planning and symbolic habit rules
+          to model human-like decision dynamics in sequential and visual domains.
+        </p>
+        <div class="author-hero">
+          <p class="author-hero-names">
+            Zhiren Gong<sup>1,2</sup>, Chao Yang<sup>1</sup>, Wendi Ren<sup>1</sup>, Shuang Li<sup>1</sup>
+          </p>
+          <p class="author-hero-affils">
+            <span><sup>1</sup> The Chinese University of Hong Kong, Shenzhen</span>
+            <span><sup>2</sup> Nanyang Technological University</span>
+          </p>
+        </div>
+        <div class="cta">
+          <a class="btn btn-soft" href="https://openreview.net/forum?id=FZXwkBH6s7" target="_blank" rel="noreferrer">Paper</a>
+          <button id="copyCiteHero" class="btn" type="button">Cite</button>
+        </div>
+      </div>
+      <figure class="card figure-card hero-figure">
+        <img src="./assets/model_framework_clean.png" alt="Model framework for rule-guided active inference" data-full="./assets/model_framework_clean.png" loading="eager">
+        <figcaption>Figure. End-to-end model framework with world model, habitual policy, wake phase, and sleep phase.</figcaption>
+      </figure>
+      <div class="hero-bottom grid2">
+        <article class="card hero-insight-card">
+          <h3>Accuracy Gain in Real Trajectories</h3>
+          <p>
+            On NBA SportVU, our wake-sleep consolidation reaches <strong>Acc@3 91.32%</strong>, clearly above
+            DreamerV2 at <strong>83.57%</strong>. The gap indicates that reusable rule priors improve prediction quality
+            without sacrificing model-based reasoning.
+          </p>
+        </article>
+        <article class="card hero-insight-card">
+          <h3>Latency Advantage in Online Decision</h3>
+          <p>
+            In the same setup, online inference drops to <strong>35.92 ms</strong> versus <strong>52.73 ms</strong>,
+            showing that rule-triggered habitual shortcuts reduce deliberation cost while preserving robust behavior
+            in sequential planning tasks.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="container metrics">
+      <article><h3>4</h3><p>Diverse domains</p></article>
+      <article><h3>91.32%</h3><p>NBA Acc@3 (ours)</p></article>
+      <article><h3>95.87%</h3><p>Car-Following Acc@3 (ours)</p></article>
+      <article><h3>77.20%</h3><p>Atari Acc@3 (ours)</p></article>
+      <article><h3>10.44-159.45 ms</h3><p>Ours latency range across domains</p></article>
+    </section>
+
+    <section id="abstract" class="container section">
+      <h2>Abstract</h2>
+      <article class="card">
+        <p>
+          Humans combine deliberate planning in novel contexts with fast habitual responses in familiar contexts.
+          This paper models that switching behavior in a unified active-inference framework where habits are represented
+          as interpretable symbolic rules.
+        </p>
+        <p>
+          The core training design is a biologically inspired <strong>wake-sleep cycle</strong>:
+          wake extracts candidate rules from real trajectories when they consistently reduce free energy;
+          sleep performs generative replay to consolidate, prune, and semantically anchor those rules.
+        </p>
+        <p>
+          Across sports trajectories, driving behavior, medical diagnosis, and Atari strategy, the approach improves
+          predictive accuracy and efficiency against logic-based, deep learning, active inference, model-based RL,
+          and LLM-based baselines, while yielding interpretable habit structures.
+        </p>
+      </article>
+    </section>
+
+    <section id="method" class="container section">
+      <h2>Method</h2>
+      <div class="grid3 method-flow">
+        <article class="card">
+          <h3>1) Wake Phase: Harvest Habits</h3>
+          <p>Run active inference on real trajectories, infer latent state and intention, and mine high-confidence rules when free-energy reductions recur.</p>
+          <p class="note">Output: candidate rule tuples and confidence updates.</p>
+        </article>
+        <article class="card">
+          <h3>2) Sleep Phase: Consolidate Rules</h3>
+          <p>Perform generative replay with the world model, jointly update model/policy parameters, refine rule prototypes, and prune weak rules.</p>
+          <p class="note">Output: compact, reusable, semantically anchored habit library.</p>
+        </article>
+        <article class="card">
+          <h3>3) Online Fusion: Plan + Habit</h3>
+          <p>Blend expected-free-energy planning with rule-triggered priors, enabling low-latency responses in familiar states and flexible planning in novel states.</p>
+          <p class="note">Result: interpretable acceleration without losing adaptability.</p>
+        </article>
+      </div>
+
+      <article class="card">
+        <h3>Core Design Insight</h3>
+        <ul>
+          <li><strong>Rules are learned, not fixed:</strong> they emerge from repeated free-energy reductions on real behavior traces.</li>
+          <li><strong>Rules are grounded:</strong> each rule is linked to latent state prototypes and discrete intentions, bridging neural and symbolic reasoning.</li>
+          <li><strong>Rules are calibrated:</strong> sleep-phase replay stabilizes and denoises rules before deployment.</li>
+          <li><strong>Rules do not replace planning:</strong> arbitration keeps model-based reasoning active under uncertainty.</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <h3>Method Evidence (Click to Expand)</h3>
+        <div class="method-controls">
+          <button class="btn btn-soft btn-sm method-toggle" type="button" data-target="methodPanelTraining">Show Training Dynamics</button>
+          <button class="btn btn-soft btn-sm method-toggle" type="button" data-target="methodPanelRule">Show Rule Visualization</button>
+        </div>
+        <div id="methodPanelTraining" class="method-panel">
+          <figure class="card figure-card">
+            <img src="./assets/nba_training_dynamics.png" alt="NBA training dynamics of free-energy terms" data-full="./assets/nba_training_dynamics.png" loading="lazy">
+            <figcaption>Figure. Decreasing free-energy components during wake-sleep optimization indicate stable convergence.</figcaption>
+          </figure>
+        </div>
+        <div id="methodPanelRule" class="method-panel">
+          <figure class="card figure-card">
+            <img src="./assets/nba_rule_visualization.png" alt="Rule visualization and envelopes in latent space" data-full="./assets/nba_rule_visualization.png" loading="lazy">
+            <figcaption>Figure. Rule envelopes in latent space expose interpretable habit structures.</figcaption>
+          </figure>
+        </div>
+      </article>
+    </section>
+
+    <section id="results" class="container section">
+      <h2>Main Results</h2>
+      <article class="card full-width-table-card">
+        <h3>Best-Configuration Comparison Across Domains</h3>
+        <p class="scroll-hint">Hint: scroll horizontally on smaller screens.</p>
+        <div class="table-scroll">
+          <table class="wide-table">
+            <thead>
+              <tr>
+                <th rowspan="2">Method</th>
+                <th colspan="2">NBA SportVU</th>
+                <th colspan="2">Car-Following</th>
+                <th colspan="2">DDXPlus</th>
+                <th colspan="2">Atari-Berzerk</th>
+              </tr>
+              <tr>
+                <th>Acc@3</th><th>Lat (ms)</th>
+                <th>Acc@3</th><th>Lat (ms)</th>
+                <th>Acc@3</th><th>Lat (ms)</th>
+                <th>Acc@3</th><th>Lat (ms)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>RNNLogic</td><td>60.55</td><td>26.90</td><td>68.14</td><td>7.58</td><td>16.29</td><td>124.32</td><td>27.50</td><td>72.46</td></tr>
+              <tr><td>STLR</td><td>74.67</td><td>174.18</td><td>76.57</td><td>58.29</td><td>18.33</td><td>872.00</td><td>38.72</td><td>432.35</td></tr>
+              <tr><td>Re-Net</td><td>68.45</td><td>218.42</td><td>70.71</td><td>72.23</td><td>20.18</td><td>1112.42</td><td>32.48</td><td>723.02</td></tr>
+              <tr><td>DAI</td><td>70.58</td><td>262.33</td><td>73.35</td><td>146.33</td><td>39.27</td><td>2033.25</td><td>52.28</td><td>977.24</td></tr>
+              <tr><td>DAI-MC</td><td>80.61</td><td>386.50</td><td>82.87</td><td>189.75</td><td>52.15</td><td>2304.23</td><td>58.20</td><td>1429.00</td></tr>
+              <tr><td>LaTee</td><td>73.32</td><td>1244.20</td><td>74.75</td><td>528.33</td><td>22.14</td><td>95028.72</td><td>54.21</td><td>3230.43</td></tr>
+              <tr><td>Qwen-0.5B</td><td>64.18</td><td>2845.35</td><td>68.32</td><td>1256.82</td><td>19.62</td><td>125842.15</td><td>51.25</td><td>4856.72</td></tr>
+              <tr><td>DreamerV2</td><td>83.57</td><td>52.73</td><td>85.38</td><td>38.57</td><td>61.48</td><td>452.25</td><td>72.18</td><td>108.02</td></tr>
+              <tr class="best-row"><td>Ours</td><td>91.32</td><td>35.92</td><td>95.87</td><td>10.44</td><td>73.58</td><td>159.45</td><td>77.20</td><td>92.63</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="note">
+          Table content is aligned with the compact overall best-configuration comparison in the accepted manuscript.
+        </p>
+      </article>
+
+      <div class="grid2">
+        <figure class="card figure-card">
+          <img src="./assets/nba_testing_metrics.png" alt="NBA testing metrics including accuracy and latency" data-full="./assets/nba_testing_metrics.png" loading="lazy">
+          <figcaption>Figure. Held-out testing curves (Acc@k, HHAR, latency) on NBA show strong and stable performance.</figcaption>
+        </figure>
+        <figure class="card figure-card">
+          <img src="./assets/atari_testing_metrics.png" alt="Atari testing metrics" data-full="./assets/atari_testing_metrics.png" loading="lazy">
+          <figcaption>Figure. Atari testing metrics indicate sustained improvements under temporal visual complexity.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="tradeoff" class="container section">
+      <h2>Rule-Performance Trade-off</h2>
+      <article class="card">
+        <p>
+          The paper reports a consistent Pareto knee across datasets: increasing rule count lowers latency,
+          but accuracy follows an inverted-U due to rule conflicts beyond the compact optimum.
+        </p>
+        <h3>Insights</h3>
+        <ul>
+          <li><strong>Knee is operationally optimal:</strong> the best deployment point is not maximal rule count but balanced rule compactness.</li>
+          <li><strong>Coverage and precision diverge:</strong> beyond the knee, rule-hit rate can still rise while Acc@k drops due to competing rules.</li>
+          <li><strong>Memory-latency-accuracy triad:</strong> larger rule banks increase memory and can erode accuracy gains despite lower planning cost.</li>
+        </ul>
+      </article>
+      <div class="grid2">
+        <figure class="card figure-card">
+          <img src="./assets/tradeoff_nba.png" alt="NBA tradeoff Pareto front" data-full="./assets/tradeoff_nba.png" loading="lazy">
+          <figcaption>Figure. NBA Pareto front: compact rule banks deliver the best accuracy-latency balance.</figcaption>
+        </figure>
+        <figure class="card figure-card">
+          <img src="./assets/tradeoff_car_following.png" alt="Car-following tradeoff Pareto front" data-full="./assets/tradeoff_car_following.png" loading="lazy">
+          <figcaption>Figure. Car-following tradeoff: low latency with high Acc@3 near the Pareto knee.</figcaption>
+        </figure>
+      </div>
+      <div class="grid2">
+        <figure class="card figure-card">
+          <img src="./assets/tradeoff_ddxplus.png" alt="DDXPlus tradeoff Pareto front" data-full="./assets/tradeoff_ddxplus.png" loading="lazy">
+          <figcaption>Figure. DDXPlus tradeoff under large action space (225 actions).</figcaption>
+        </figure>
+        <figure class="card figure-card">
+          <img src="./assets/tradeoff_atari.png" alt="Atari tradeoff Pareto front" data-full="./assets/tradeoff_atari.png" loading="lazy">
+          <figcaption>Figure. Atari-Berzerk tradeoff validates robustness in temporal visual decision tasks.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="ablation" class="container section">
+      <h2>Ablation & Mechanism Checks</h2>
+      <div class="grid2">
+        <figure class="card figure-card">
+          <img src="./assets/ablation_trim.png" alt="Ablation summary figure" data-full="./assets/ablation_trim.png" loading="lazy">
+          <figcaption>Figure. Ablation confirms each component contributes distinct capabilities (speed, precision, stability).</figcaption>
+        </figure>
+        <article class="card">
+          <h3>Paper-Aligned Ablation Insights</h3>
+          <ul>
+            <li>Removing rules hurts both accuracy and latency.</li>
+            <li>Removing latent intention reduces precision and increases runtime.</li>
+            <li>Dropping VFE consistency causes major predictive degradation.</li>
+            <li>Greedy rule selection can be fast but unstable and less accurate.</li>
+          </ul>
+          <p class="note">The full model outperforms partial variants by combining rule grounding, planning arbitration, and wake-sleep consolidation.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="cases" class="container section">
+      <h2>Interpretable Case Views</h2>
+      <article class="card">
+        <h3>How to Read These Cases</h3>
+        <p>
+          Each panel visualizes the same mechanism in a different domain: the world model provides predictive structure,
+          while rule triggers serve as low-cost habitual shortcuts when confidence is high. The key signal is not only
+          trajectory plausibility but also whether decisions stay stable under domain-specific complexity.
+        </p>
+        <ul>
+          <li><strong>NBA:</strong> rules align with tactical motion patterns and reduce unnecessary deliberation.</li>
+          <li><strong>Car-Following:</strong> compact habits preserve high accuracy with very low latency.</li>
+          <li><strong>DDXPlus:</strong> rule grounding improves rare-action diagnostic behavior in large action space.</li>
+          <li><strong>Atari:</strong> latent-state reconstruction and rule fusion stabilize temporal visual decision-making.</li>
+        </ul>
+      </article>
+      <div class="dataset-tabs">
+        <button class="tab-btn active" type="button" data-panel="panel_nba">NBA</button>
+        <button class="tab-btn" type="button" data-panel="panel_car">Car-Following</button>
+        <button class="tab-btn" type="button" data-panel="panel_ddx">DDXPlus</button>
+        <button class="tab-btn" type="button" data-panel="panel_atari">Atari</button>
+      </div>
+      <div id="panel_nba" class="tab-panel active">
+        <figure class="card figure-card">
+          <img src="./assets/nba_interpretable_analysis.png" alt="NBA interpretable trajectory analysis" data-full="./assets/nba_interpretable_analysis.png" loading="lazy">
+          <figcaption>Figure. NBA rule-guided inference with world-model overlays and interpretable trajectory control.</figcaption>
+        </figure>
+      </div>
+      <div id="panel_car" class="tab-panel">
+        <figure class="card figure-card">
+          <img src="./assets/car_interpretable_analysis.png" alt="Car-following interpretable analysis" data-full="./assets/car_interpretable_analysis.png" loading="lazy">
+          <figcaption>Figure. Car-following case: habitual control supports low-latency robust predictions.</figcaption>
+        </figure>
+      </div>
+      <div id="panel_ddx" class="tab-panel">
+        <figure class="card figure-card">
+          <img src="./assets/ddxplus_interpretable_analysis.png" alt="DDXPlus interpretable diagnosis analysis" data-full="./assets/ddxplus_interpretable_analysis.png" loading="lazy">
+          <figcaption>Figure. DDXPlus case: rule-guided reasoning improves rare-action diagnostic pathways.</figcaption>
+        </figure>
+      </div>
+      <div id="panel_atari" class="tab-panel">
+        <figure class="card figure-card">
+          <img src="./assets/atari_interpretable_analysis.png" alt="Atari interpretable analysis" data-full="./assets/atari_interpretable_analysis.png" loading="lazy">
+          <figcaption>Figure. Atari-Berzerk case: world-model reconstruction and rule-triggered action selection.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="resources" class="container section">
+      <h2>Resources</h2>
+      <div class="grid2">
+        <a class="card resource-card resource-link" href="https://openreview.net/forum?id=FZXwkBH6s7" target="_blank" rel="noreferrer">
+          <h3>Paper</h3>
+          <p>OpenReview page for ICLR 2026 publication.</p>
+        </a>
+        <article class="card resource-card">
+          <h3>Contact</h3>
+          <p><a class="contact-link" href="mailto:zhiren001@e.ntu.edu.sg">zhiren001@e.ntu.edu.sg</a></p>
+        </article>
+      </div>
+
+      <article class="card">
+        <div class="bib-head">
+          <h3>BibTeX</h3>
+          <button id="copyBib" class="btn btn-sm btn-soft" type="button">Copy BibTeX</button>
+        </div>
+        <pre id="bib">@inproceedings{
+zhiren2026learning,
+title={Learning Human Habits with Rule-Guided Active Inference},
+author={GONG ZHIREN and Chao Yang and Wendi Ren and Shuang Li},
+booktitle={The Fourteenth International Conference on Learning Representations},
+year={2026},
+url={https://openreview.net/forum?id=FZXwkBH6s7}
+}</pre>
+      </article>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>Rule-Guided Active Inference · high-quality project website draft.</p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" aria-hidden="true">
+    <button id="lightboxClose" class="lightbox-close" type="button" aria-label="Close image view">×</button>
+    <img id="lightboxImg" src="" alt="Expanded figure preview">
+  </div>
+
+  <script src="./script.js"></script>
+</body>
+</html>
