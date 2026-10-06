@@ -10,12 +10,18 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./styles.css">
   <link rel="stylesheet" href="./enhance.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2028%2028%27%3E%3Crect%20width%3D%2728%27%20height%3D%2728%27%20rx%3D%277%27%20fill%3D%27%230f1724%27/%3E%3Cpath%20d%3D%27M20.5%2010A8%208%200%201%200%2021%2016%27%20fill%3D%27none%27%20stroke%3D%27%232fd4c6%27%20stroke-width%3D%272.1%27%20stroke-linecap%3D%27round%27/%3E%3Cpath%20d%3D%27M20%206.5L21%2010L17.4%2010.6%27%20fill%3D%27none%27%20stroke%3D%27%232fd4c6%27%20stroke-width%3D%272.1%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27/%3E%3Ccircle%20cx%3D%2714%27%20cy%3D%2714%27%20r%3D%273%27%20fill%3D%27%239b8cff%27/%3E%3Ccircle%20cx%3D%2714%27%20cy%3D%276.2%27%20r%3D%271.9%27%20fill%3D%27%23f0b24a%27/%3E%3C/svg%3E">
 </head>
 <body>
   <header class="topbar">
     <div class="container nav">
       <a class="brand" href="#top">
-        <span class="brand-mark"></span>
+        <svg class="brand-mark" viewBox="0 0 28 28" width="24" height="24" aria-hidden="true" style="flex:none;background:none">
+          <path d="M20.5 9A8 8 0 1 0 21.5 15.5" fill="none" stroke="#2fd4c6" stroke-width="2.2" stroke-linecap="round"/>
+          <path d="M20 5.4L21.6 9L17.6 9.8" fill="none" stroke="#2fd4c6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="14" cy="14" r="3.2" fill="#9b8cff"/>
+          <circle cx="14" cy="5.6" r="2" fill="#f0b24a"/>
+        </svg>
         <span>Rule-Guided Active Inference</span>
       </a>
       <nav>
@@ -109,6 +115,45 @@
 
     <section id="method" class="container section">
       <h2>Method</h2>
+
+      <style>
+      .aiv{padding:20px 22px;margin:2px 0 24px}
+      .aiv-head{display:flex;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+      .aiv-badge{font:700 11.5px/1 Inter,sans-serif;letter-spacing:.07em;text-transform:uppercase;color:#07231f;
+        background:linear-gradient(120deg,var(--teal,#2fd4c6),var(--violet,#9b8cff));padding:6px 13px;border-radius:999px}
+      .aiv-sub{color:var(--ink-soft,#9fb0c6);font-size:14px}
+      .aiv-body{display:grid;grid-template-columns:360px 1fr;gap:24px;align-items:center}
+      @media(max-width:820px){.aiv-body{grid-template-columns:1fr;justify-items:center}}
+      .aiv-right{display:flex;flex-direction:column;gap:14px}
+      .aiv-phase{display:inline-flex;align-items:center;gap:9px;align-self:flex-start;padding:8px 15px;border-radius:999px;
+        border:1px solid var(--line,rgba(130,160,200,.25));font:700 14px/1 Inter;transition:all .5s}
+      .aiv-phase .dot{width:10px;height:10px;border-radius:50%;transition:all .5s}
+      .aiv-step{font-size:15px;color:#eaf2ff;font-weight:600;min-height:20px}
+      .aiv-step small{display:block;font-weight:400;color:var(--ink-soft,#9fb0c6);font-size:13px;margin-top:3px}
+      .aiv-fe{margin-top:4px}
+      .aiv-fe .lab{display:flex;justify-content:space-between;font:600 12px/1 Inter;color:var(--ink-soft,#9fb0c6);margin-bottom:6px}
+      .aiv-fe .bar{height:10px;border-radius:6px;background:rgba(130,160,200,.16);overflow:hidden}
+      .aiv-fe .bar i{display:block;height:100%;width:100%;border-radius:6px;background:linear-gradient(90deg,var(--violet,#9b8cff),var(--teal,#2fd4c6));transition:width .8s cubic-bezier(.2,.7,.2,1)}
+      .aiv-cap{margin:14px 2px 0;color:var(--ink-soft,#9fb0c6);font-size:13.5px;line-height:1.6}
+      .aiv-cap b{color:#eaf2ff}
+      </style>
+      <figure class="card figure-card aiv" aria-label="Live demonstration of the rule-guided active-inference loop">
+        <div class="aiv-head"><span class="aiv-badge">Active Inference · live</span>
+          <span class="aiv-sub">a closed <b style="color:var(--teal,#2fd4c6)">perceive → infer → act</b> loop, biased by symbolic <b style="color:var(--amber,#f0b24a)">habit rules</b>, consolidated in <b style="color:var(--violet,#9b8cff)">wake / sleep</b></span></div>
+        <div class="aiv-body">
+          <svg id="aivSvg" viewBox="0 0 340 300" style="width:100%;max-width:360px;height:auto"></svg>
+          <div class="aiv-right">
+            <div class="aiv-phase" id="aivPhase"><span class="dot"></span><span class="t">Wake</span></div>
+            <div class="aiv-step" id="aivStep"></div>
+            <div class="aiv-fe">
+              <div class="lab"><span>expected free energy</span><span id="aivFeVal">—</span></div>
+              <div class="bar"><i id="aivFe"></i></div>
+            </div>
+          </div>
+        </div>
+        <p class="aiv-cap">In the <b>wake</b> phase the agent acts to minimize expected free energy and harvests recurring <b>habit rules</b>; in <b>sleep</b> it replays and consolidates them into the world model — so planning gets cheaper while staying robust. The same loop drives sequential and visual domains.</p>
+      </figure>
+
       <div class="grid3 method-flow">
         <article class="card">
           <h3>1) Wake Phase: Harvest Habits</h3>
@@ -359,6 +404,79 @@ url={https://openreview.net/forum?id=FZXwkBH6s7}
     <img id="lightboxImg" src="" alt="Expanded figure preview">
   </div>
 
+  <script>
+  /* Active-Inference live: a pulse travels the perceive->infer->habit->plan->act loop;
+     wake/sleep phases alternate and expected free energy ticks down as habits consolidate. */
+  (function(){
+    var svg=document.getElementById('aivSvg'); if(!svg) return;
+    var phaseEl=document.getElementById('aivPhase'), stepEl=document.getElementById('aivStep'),
+        feEl=document.getElementById('aivFe'), feVal=document.getElementById('aivFeVal');
+    var NS='http://www.w3.org/2000/svg';
+    function mk(t,a){var n=document.createElementNS(NS,t);for(var k in a)n.setAttribute(k,a[k]);return n;}
+    var cx=170,cy=150,R=108;
+    var NODES=[
+      {n:'Perceive', c:'#2fd4c6', d:'observation oₜ'},
+      {n:'Infer state', c:'#9b8cff', d:'world-model belief'},
+      {n:'Habit rules', c:'#f0b24a', d:'symbolic priors'},
+      {n:'Plan', c:'#5ea8ff', d:'policy via EFE'},
+      {n:'Act', c:'#2fd4c6', d:'into the world'}
+    ];
+    var P=NODES.map(function(_,i){var a=-Math.PI/2+i*2*Math.PI/NODES.length;return [cx+Math.cos(a)*R,cy+Math.sin(a)*R];});
+    /* arcs between consecutive nodes (around the ring) */
+    var arcs=[];
+    for(var i=0;i<NODES.length;i++){var j=(i+1)%NODES.length;
+      var mid=[(P[i][0]+P[j][0])/2,(P[i][1]+P[j][1])/2];
+      var dirx=mid[0]-cx, diry=mid[1]-cy, dl=Math.hypot(dirx,diry)||1; var bx=mid[0]+dirx/dl*16, by=mid[1]+diry/dl*16;
+      var a=mk('path',{d:'M'+P[i][0]+' '+P[i][1]+' Q '+bx+' '+by+' '+P[j][0]+' '+P[j][1],fill:'none',stroke:'rgba(130,160,200,.22)','stroke-width':2});
+      svg.appendChild(a); arcs.push(a);
+    }
+    /* nodes */
+    var nodeEls=NODES.map(function(nd,i){
+      var g=mk('g',{}); var c=mk('circle',{cx:P[i][0],cy:P[i][1],r:12,fill:'#15202f',stroke:nd.c,'stroke-width':2.2});
+      var t=mk('text',{x:P[i][0],y:P[i][1]-20,fill:'#cdd9ea','font-size':12,'font-weight':700,'text-anchor':'middle','font-family':'Inter'});t.textContent=nd.n;
+      /* keep labels inside for side nodes */
+      if(P[i][1]>cy+20){t.setAttribute('y',P[i][1]+28);}
+      g.appendChild(c);g.appendChild(t);svg.appendChild(g); return {c:c,t:t};
+    });
+    var pulse=mk('circle',{r:6.5,fill:'#fff',opacity:0,style:'filter:drop-shadow(0 0 7px #2fd4c6)'}); svg.appendChild(pulse);
+    var reduce=false; try{reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;}catch(e){}
+    var fe=100, cycle=0, i=0;
+    function setPhase(sleep){
+      phaseEl.querySelector('.t').textContent=sleep?'Sleep · consolidate':'Wake · act & harvest';
+      phaseEl.querySelector('.dot').style.background=sleep?'#9b8cff':'#2fd4c6';
+      phaseEl.querySelector('.dot').style.boxShadow='0 0 8px '+(sleep?'#9b8cff':'#2fd4c6');
+      phaseEl.style.borderColor=sleep?'rgba(155,140,255,.5)':'rgba(47,212,198,.5)';
+      phaseEl.style.color=sleep?'#c9bcff':'#8ff0e6';
+    }
+    function lightNode(k){
+      nodeEls.forEach(function(e,idx){var on=idx===k;
+        e.c.setAttribute('r',on?15:12); e.c.setAttribute('fill',on?NODES[k].c:'#15202f');
+        e.c.setAttribute('style',on?'filter:drop-shadow(0 0 8px '+NODES[idx].c+')':'');
+        e.t.setAttribute('fill',on?'#ffffff':'#cdd9ea');});
+      arcs.forEach(function(a,idx){a.setAttribute('stroke',idx===k?NODES[k].c:'rgba(130,160,200,.22)');a.setAttribute('stroke-width',idx===k?3:2);});
+      pulse.setAttribute('cx',P[k][0]);pulse.setAttribute('cy',P[k][1]);pulse.setAttribute('opacity','1');pulse.setAttribute('fill',NODES[k].c);
+      stepEl.innerHTML=NODES[k].n+' <small>'+NODES[k].d+'</small>';
+    }
+    function step(){
+      var sleep=(cycle%2===1);
+      setPhase(sleep);
+      lightNode(i);
+      if(i===NODES.length-1){ // end of a loop
+        fe=Math.max(18, fe-(sleep?6:11)); if(fe<=20) fe=100-6; // gentle decay, reset occasionally
+        feEl.style.width=fe+'%'; feVal.textContent=fe.toFixed(0);
+      }
+      i++; if(i>=NODES.length){ i=0; cycle++; }
+    }
+    feEl.style.width='100%'; feVal.textContent='100';
+    if(reduce){ lightNode(2); setPhase(false); feEl.style.width='46%'; feVal.textContent='46'; return; }
+    var started=false, timer=null;
+    function start(){ if(started)return; started=true; step(); timer=setInterval(step,1150); }
+    if('IntersectionObserver' in window){
+      var io=new IntersectionObserver(function(e){e.forEach(function(en){if(en.isIntersecting){start();io.disconnect();}});},{threshold:.3});
+      io.observe(svg);
+    } else start();
+  })();
+  </script>
   <script src="./script.js"></script>
   <script src="./enhance.js"></script>
 </body>
