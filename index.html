@@ -118,40 +118,70 @@
 
       <style>
       .aiv{padding:20px 22px;margin:2px 0 24px}
-      .aiv-head{display:flex;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+      .aiv-head{display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap}
       .aiv-badge{font:700 11.5px/1 Inter,sans-serif;letter-spacing:.07em;text-transform:uppercase;color:#07231f;
         background:linear-gradient(120deg,var(--teal,#2fd4c6),var(--violet,#9b8cff));padding:6px 13px;border-radius:999px}
-      .aiv-sub{color:var(--ink-soft,#9fb0c6);font-size:14px}
-      .aiv-body{display:grid;grid-template-columns:360px 1fr;gap:24px;align-items:center}
-      @media(max-width:820px){.aiv-body{grid-template-columns:1fr;justify-items:center}}
-      .aiv-right{display:flex;flex-direction:column;gap:14px}
-      .aiv-phase{display:inline-flex;align-items:center;gap:9px;align-self:flex-start;padding:8px 15px;border-radius:999px;
-        border:1px solid var(--line,rgba(130,160,200,.25));font:700 14px/1 Inter;transition:all .5s}
-      .aiv-phase .dot{width:10px;height:10px;border-radius:50%;transition:all .5s}
-      .aiv-step{font-size:15px;color:#eaf2ff;font-weight:600;min-height:20px}
-      .aiv-step small{display:block;font-weight:400;color:var(--ink-soft,#9fb0c6);font-size:13px;margin-top:3px}
-      .aiv-fe{margin-top:4px}
-      .aiv-fe .lab{display:flex;justify-content:space-between;font:600 12px/1 Inter;color:var(--ink-soft,#9fb0c6);margin-bottom:6px}
-      .aiv-fe .bar{height:10px;border-radius:6px;background:rgba(130,160,200,.16);overflow:hidden}
-      .aiv-fe .bar i{display:block;height:100%;width:100%;border-radius:6px;background:linear-gradient(90deg,var(--violet,#9b8cff),var(--teal,#2fd4c6));transition:width .8s cubic-bezier(.2,.7,.2,1)}
-      .aiv-cap{margin:14px 2px 0;color:var(--ink-soft,#9fb0c6);font-size:13.5px;line-height:1.6}
+      .aiv-sub{color:var(--ink-soft,#9fb0c6);font-size:14px;flex:1;min-width:240px}
+      .aiv-body{display:grid;grid-template-columns:260px 1fr;gap:22px;align-items:stretch}
+      @media(max-width:860px){.aiv-body{grid-template-columns:1fr}}
+      .aiv-panel{border:1px solid var(--line,rgba(130,160,200,.22));border-radius:14px;padding:14px 15px;background:var(--card2,rgba(18,28,44,.5))}
+      .aiv-ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+      .aiv-ph h5{margin:0;font:700 12.5px/1 Inter;color:#eaf2ff}
+      .aiv-phase{display:inline-flex;align-items:center;gap:7px;padding:5px 11px;border-radius:999px;font:700 11px/1 Inter;
+        border:1px solid var(--line,rgba(130,160,200,.25));transition:all .5s}
+      .aiv-phase .d{width:8px;height:8px;border-radius:50%;transition:all .5s}
+      .aiv-rules{display:flex;flex-direction:column;gap:8px;min-height:150px}
+      .aiv-rule{display:grid;grid-template-columns:34px 1fr;gap:9px;align-items:center;opacity:0;transform:translateY(6px);transition:all .45s}
+      .aiv-rule.in{opacity:1;transform:none}
+      .aiv-rule.fire .tag{box-shadow:0 0 0 3px rgba(47,212,198,.3)}
+      .aiv-rule.prune{opacity:.25;filter:grayscale(.6)}
+      .aiv-rule .tag{font:700 11px/1 Inter;color:#07231f;background:linear-gradient(120deg,#2fd4c6,#6fe0d2);border-radius:7px;padding:6px 0;text-align:center}
+      .aiv-rule .mt{height:8px;border-radius:5px;background:rgba(130,160,200,.18);overflow:hidden}
+      .aiv-rule .mt i{display:block;height:100%;width:0;border-radius:5px;background:linear-gradient(90deg,#2fd4c6,#9b8cff);transition:width .5s}
+      .aiv-rules-empty{color:var(--ink-soft,#8295ad);font-size:12.5px;font-style:italic;padding:8px 2px}
+      .aiv-stage{display:flex;flex-direction:column;gap:12px}
+      .aiv-ctx{align-self:flex-start;font:700 13px/1 Inter;color:#eaf2ff;background:rgba(94,168,255,.14);
+        border:1px solid rgba(94,168,255,.4);border-radius:10px;padding:9px 14px;transition:all .4s}
+      .aiv-lanes{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+      .aiv-lane{border:1.5px solid var(--line,rgba(130,160,200,.25));border-radius:12px;padding:12px;opacity:.45;transition:all .45s;position:relative}
+      .aiv-lane b{display:block;font:700 13px/1 Inter;margin-bottom:5px}
+      .aiv-lane span{font:600 11.5px/1 Inter;color:var(--ink-soft,#9fb0c6)}
+      .aiv-lane .ms{position:absolute;top:10px;right:11px;font:800 12px/1 Inter}
+      .aiv-lane.fast b{color:#2fd4c6} .aiv-lane.fast .ms{color:#2fd4c6}
+      .aiv-lane.slow b{color:#f0b24a} .aiv-lane.slow .ms{color:#f0b24a}
+      .aiv-lane.on{opacity:1}
+      .aiv-lane.fast.on{border-color:#2fd4c6;box-shadow:0 8px 24px rgba(47,212,198,.2)}
+      .aiv-lane.slow.on{border-color:#f0b24a;box-shadow:0 8px 24px rgba(240,178,74,.18)}
+      .aiv-metrics{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:2px}
+      .aiv-m{border:1px solid var(--line,rgba(130,160,200,.22));border-radius:11px;padding:9px 6px;text-align:center}
+      .aiv-m .v{font:800 20px/1 'Sora',Inter,sans-serif;color:#eaf2ff}
+      .aiv-m .l{font:600 10px/1.2 Inter;color:var(--ink-soft,#9fb0c6);margin-top:5px}
+      .aiv-cap{margin:15px 2px 0;color:var(--ink-soft,#9fb0c6);font-size:13.5px;line-height:1.6}
       .aiv-cap b{color:#eaf2ff}
       </style>
-      <figure class="card figure-card aiv" aria-label="Live demonstration of the rule-guided active-inference loop">
+      <figure class="card figure-card aiv" aria-label="Live demonstration of rule-guided active inference">
         <div class="aiv-head"><span class="aiv-badge">Active Inference · live</span>
-          <span class="aiv-sub">a closed <b style="color:var(--teal,#2fd4c6)">perceive → infer → act</b> loop, biased by symbolic <b style="color:var(--amber,#f0b24a)">habit rules</b>, consolidated in <b style="color:var(--violet,#9b8cff)">wake / sleep</b></span></div>
+          <span class="aiv-sub">Full planning is accurate but <b style="color:#f0b24a">slow every step</b>. RGAI compiles recurring situations into <b style="color:#2fd4c6">habit rules</b> that fire instantly — falling back to planning only when a context is <b>novel</b>.</span></div>
         <div class="aiv-body">
-          <svg id="aivSvg" viewBox="0 0 340 300" style="width:100%;max-width:360px;height:auto"></svg>
-          <div class="aiv-right">
-            <div class="aiv-phase" id="aivPhase"><span class="dot"></span><span class="t">Wake</span></div>
-            <div class="aiv-step" id="aivStep"></div>
-            <div class="aiv-fe">
-              <div class="lab"><span>expected free energy</span><span id="aivFeVal">—</span></div>
-              <div class="bar"><i id="aivFe"></i></div>
+          <div class="aiv-panel">
+            <div class="aiv-ph"><h5>habit rule library</h5>
+              <span class="aiv-phase" id="aivPhase"><span class="d"></span><span class="t">Wake</span></span></div>
+            <div class="aiv-rules" id="aivRules"><div class="aiv-rules-empty">empty — every context still needs full planning</div></div>
+          </div>
+          <div class="aiv-stage">
+            <div class="aiv-ctx" id="aivCtx">incoming situation&nbsp;…</div>
+            <div class="aiv-lanes">
+              <div class="aiv-lane fast" id="aivFast"><span class="ms">36ms</span><b>fire habit</b><span>matched rule → act instantly</span></div>
+              <div class="aiv-lane slow" id="aivSlow"><span class="ms">53ms</span><b>full EFE planning</b><span>minimize expected free energy</span></div>
+            </div>
+            <div class="aiv-metrics">
+              <div class="aiv-m"><div class="v" id="aivLat">53</div><div class="l">avg latency (ms) ↓</div></div>
+              <div class="aiv-m"><div class="v" id="aivHit">0%</div><div class="l">habit hit-rate ↑</div></div>
+              <div class="aiv-m"><div class="v" id="aivRules2">0</div><div class="l">rules learned</div></div>
             </div>
           </div>
         </div>
-        <p class="aiv-cap">In the <b>wake</b> phase the agent acts to minimize expected free energy and harvests recurring <b>habit rules</b>; in <b>sleep</b> it replays and consolidates them into the world model — so planning gets cheaper while staying robust. The same loop drives sequential and visual domains.</p>
+        <p class="aiv-cap">Both paths are scored under one <b>free-energy objective</b>: in <b style="color:#2fd4c6">wake</b> the agent acts and harvests high-confidence rules; in <b style="color:#9b8cff">sleep</b> it replays to <b>strengthen</b> useful rules and <b>prune</b> weak ones. As the library grows, more decisions take the fast path — latency drops while a confident plan is never overridden.</p>
       </figure>
 
       <div class="grid3 method-flow">
@@ -405,75 +435,69 @@ url={https://openreview.net/forum?id=FZXwkBH6s7}
   </div>
 
   <script>
-  /* Active-Inference live: a pulse travels the perceive->infer->habit->plan->act loop;
-     wake/sleep phases alternate and expected free energy ticks down as habits consolidate. */
+  /* Rule-Guided Active Inference — dual-path demo: novel context -> slow EFE planning
+     (harvest a rule); familiar context -> fire a habit (fast). Wake harvests, sleep
+     strengthens/prunes. Avg latency falls and habit hit-rate rises as the library grows. */
   (function(){
-    var svg=document.getElementById('aivSvg'); if(!svg) return;
-    var phaseEl=document.getElementById('aivPhase'), stepEl=document.getElementById('aivStep'),
-        feEl=document.getElementById('aivFe'), feVal=document.getElementById('aivFeVal');
-    var NS='http://www.w3.org/2000/svg';
-    function mk(t,a){var n=document.createElementNS(NS,t);for(var k in a)n.setAttribute(k,a[k]);return n;}
-    var cx=170,cy=150,R=108;
-    var NODES=[
-      {n:'Perceive', c:'#2fd4c6', d:'observation oₜ'},
-      {n:'Infer state', c:'#9b8cff', d:'world-model belief'},
-      {n:'Habit rules', c:'#f0b24a', d:'symbolic priors'},
-      {n:'Plan', c:'#5ea8ff', d:'policy via EFE'},
-      {n:'Act', c:'#2fd4c6', d:'into the world'}
+    var rulesEl=document.getElementById('aivRules'); if(!rulesEl) return;
+    var phaseEl=document.getElementById('aivPhase'), ctxEl=document.getElementById('aivCtx'),
+        fast=document.getElementById('aivFast'), slow=document.getElementById('aivSlow'),
+        latEl=document.getElementById('aivLat'), hitEl=document.getElementById('aivHit'), rcEl=document.getElementById('aivRules2');
+    var CTX={C1:'navigate a pick-and-roll',C2:'react to a fast break',C3:'defend an iso drive'};
+    var SEQ=[
+      {t:'novel',c:'C1'},{t:'novel',c:'C2'},{t:'habit',c:'C1',r:0},{t:'novel',c:'C3'},
+      {t:'habit',c:'C2',r:1},{t:'habit',c:'C1',r:0},{t:'sleep'},
+      {t:'habit',c:'C3',r:2},{t:'habit',c:'C2',r:1},{t:'habit',c:'C1',r:0}
     ];
-    var P=NODES.map(function(_,i){var a=-Math.PI/2+i*2*Math.PI/NODES.length;return [cx+Math.cos(a)*R,cy+Math.sin(a)*R];});
-    /* arcs between consecutive nodes (around the ring) */
-    var arcs=[];
-    for(var i=0;i<NODES.length;i++){var j=(i+1)%NODES.length;
-      var mid=[(P[i][0]+P[j][0])/2,(P[i][1]+P[j][1])/2];
-      var dirx=mid[0]-cx, diry=mid[1]-cy, dl=Math.hypot(dirx,diry)||1; var bx=mid[0]+dirx/dl*16, by=mid[1]+diry/dl*16;
-      var a=mk('path',{d:'M'+P[i][0]+' '+P[i][1]+' Q '+bx+' '+by+' '+P[j][0]+' '+P[j][1],fill:'none',stroke:'rgba(130,160,200,.22)','stroke-width':2});
-      svg.appendChild(a); arcs.push(a);
+    var rules=[]; // {el, bar, strength}
+    var total=0, habits=0, latSum=0;
+    function setPhase(mode){ // 'wake' | 'sleep'
+      var t=phaseEl.querySelector('.t'), d=phaseEl.querySelector('.d');
+      if(mode==='sleep'){t.textContent='Sleep';d.style.background='#9b8cff';d.style.boxShadow='0 0 7px #9b8cff';phaseEl.style.borderColor='rgba(155,140,255,.5)';phaseEl.style.color='#c9bcff';}
+      else{t.textContent='Wake';d.style.background='#2fd4c6';d.style.boxShadow='0 0 7px #2fd4c6';phaseEl.style.borderColor='rgba(47,212,198,.5)';phaseEl.style.color='#8ff0e6';}
     }
-    /* nodes */
-    var nodeEls=NODES.map(function(nd,i){
-      var g=mk('g',{}); var c=mk('circle',{cx:P[i][0],cy:P[i][1],r:12,fill:'#15202f',stroke:nd.c,'stroke-width':2.2});
-      var t=mk('text',{x:P[i][0],y:P[i][1]-20,fill:'#cdd9ea','font-size':12,'font-weight':700,'text-anchor':'middle','font-family':'Inter'});t.textContent=nd.n;
-      /* keep labels inside for side nodes */
-      if(P[i][1]>cy+20){t.setAttribute('y',P[i][1]+28);}
-      g.appendChild(c);g.appendChild(t);svg.appendChild(g); return {c:c,t:t};
-    });
-    var pulse=mk('circle',{r:6.5,fill:'#fff',opacity:0,style:'filter:drop-shadow(0 0 7px #2fd4c6)'}); svg.appendChild(pulse);
+    function addRule(idx){
+      if(idx===0 && rules.length===0){rulesEl.innerHTML='';}
+      var row=document.createElement('div'); row.className='aiv-rule';
+      row.innerHTML='<span class="tag">R'+(rules.length+1)+'</span><span class="mt"><i></i></span>';
+      rulesEl.appendChild(row);
+      var r={el:row,bar:row.querySelector('i'),strength:0.34};
+      rules.push(r); requestAnimationFrame(function(){row.classList.add('in');r.bar.style.width='34%';});
+    }
+    function fire(i){ var r=rules[i]; if(!r)return; r.el.classList.add('fire');
+      r.strength=Math.min(1,r.strength+0.12); r.bar.style.width=Math.round(r.strength*100)+'%';
+      setTimeout(function(){r.el.classList.remove('fire');},700); }
+    function reset(lane){fast.classList.remove('on');slow.classList.remove('on');}
+    function metrics(){ latEl.textContent=Math.round(latSum/total);
+      hitEl.textContent=Math.round(habits/total*100)+'%'; rcEl.textContent=rules.length; }
     var reduce=false; try{reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;}catch(e){}
-    var fe=100, cycle=0, i=0;
-    function setPhase(sleep){
-      phaseEl.querySelector('.t').textContent=sleep?'Sleep · consolidate':'Wake · act & harvest';
-      phaseEl.querySelector('.dot').style.background=sleep?'#9b8cff':'#2fd4c6';
-      phaseEl.querySelector('.dot').style.boxShadow='0 0 8px '+(sleep?'#9b8cff':'#2fd4c6');
-      phaseEl.style.borderColor=sleep?'rgba(155,140,255,.5)':'rgba(47,212,198,.5)';
-      phaseEl.style.color=sleep?'#c9bcff':'#8ff0e6';
-    }
-    function lightNode(k){
-      nodeEls.forEach(function(e,idx){var on=idx===k;
-        e.c.setAttribute('r',on?15:12); e.c.setAttribute('fill',on?NODES[k].c:'#15202f');
-        e.c.setAttribute('style',on?'filter:drop-shadow(0 0 8px '+NODES[idx].c+')':'');
-        e.t.setAttribute('fill',on?'#ffffff':'#cdd9ea');});
-      arcs.forEach(function(a,idx){a.setAttribute('stroke',idx===k?NODES[k].c:'rgba(130,160,200,.22)');a.setAttribute('stroke-width',idx===k?3:2);});
-      pulse.setAttribute('cx',P[k][0]);pulse.setAttribute('cy',P[k][1]);pulse.setAttribute('opacity','1');pulse.setAttribute('fill',NODES[k].c);
-      stepEl.innerHTML=NODES[k].n+' <small>'+NODES[k].d+'</small>';
-    }
-    function step(){
-      var sleep=(cycle%2===1);
-      setPhase(sleep);
-      lightNode(i);
-      if(i===NODES.length-1){ // end of a loop
-        fe=Math.max(18, fe-(sleep?6:11)); if(fe<=20) fe=100-6; // gentle decay, reset occasionally
-        feEl.style.width=fe+'%'; feVal.textContent=fe.toFixed(0);
+    function doStep(st){
+      reset();
+      if(st.t==='sleep'){ setPhase('sleep'); ctxEl.textContent='sleep · replay & consolidate';
+        rules.forEach(function(r){ r.strength=Math.min(1,r.strength+0.14); r.bar.style.width=Math.round(r.strength*100)+'%'; });
+        return;
       }
-      i++; if(i>=NODES.length){ i=0; cycle++; }
+      setPhase('wake'); ctxEl.textContent='situation: '+CTX[st.c];
+      total++;
+      if(st.t==='novel'){ slow.classList.add('on'); latSum+=53; addRule(); }
+      else { fast.classList.add('on'); habits++; latSum+=36; fire(st.r); }
+      metrics();
     }
-    feEl.style.width='100%'; feVal.textContent='100';
-    if(reduce){ lightNode(2); setPhase(false); feEl.style.width='46%'; feVal.textContent='46'; return; }
-    var started=false, timer=null;
-    function start(){ if(started)return; started=true; step(); timer=setInterval(step,1150); }
+    if(reduce){ // show a representative settled state
+      ['C1','C2','C3'].forEach(function(_,i){addRule(i);}); total=6;habits=4;latSum=6*42; metrics(); setPhase('wake'); fast.classList.add('on'); ctxEl.textContent='situation: '+CTX.C1; return;
+    }
+    var i=0, started=false;
+    function tick(){ var st=SEQ[i]; doStep(st); i++;
+      if(i>=SEQ.length){ setTimeout(function(){ // soft reset
+        i=0;total=0;habits=0;latSum=0;rules=[]; rulesEl.innerHTML='<div class="aiv-rules-empty">empty — every context still needs full planning</div>';
+        latEl.textContent='53';hitEl.textContent='0%';rcEl.textContent='0';reset();ctxEl.textContent='incoming situation…'; tick();
+      }, 2600); }
+      else setTimeout(tick, st.t==='sleep'?1900:1700);
+    }
+    function start(){ if(started)return; started=true; tick(); }
     if('IntersectionObserver' in window){
       var io=new IntersectionObserver(function(e){e.forEach(function(en){if(en.isIntersecting){start();io.disconnect();}});},{threshold:.3});
-      io.observe(svg);
+      io.observe(rulesEl);
     } else start();
   })();
   </script>
