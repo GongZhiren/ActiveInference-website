@@ -152,10 +152,13 @@
       .aiv-lane.on{opacity:1}
       .aiv-lane.fast.on{border-color:#2fd4c6;box-shadow:0 8px 24px rgba(47,212,198,.2)}
       .aiv-lane.slow.on{border-color:#f0b24a;box-shadow:0 8px 24px rgba(240,178,74,.18)}
-      .aiv-metrics{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:2px}
-      .aiv-m{border:1px solid var(--line,rgba(130,160,200,.22));border-radius:11px;padding:9px 6px;text-align:center}
-      .aiv-m .v{font:800 20px/1 'Sora',Inter,sans-serif;color:#eaf2ff}
-      .aiv-m .l{font:600 10px/1.2 Inter;color:var(--ink-soft,#9fb0c6);margin-top:5px}
+      .aiv-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:2px}
+      @media(max-width:520px){.aiv-metrics{grid-template-columns:1fr 1fr}}
+      .aiv-m{border:1px solid var(--line,rgba(130,160,200,.22));border-radius:11px;padding:9px 5px;text-align:center}
+      .aiv-m.hl{border-color:rgba(47,212,198,.5);background:rgba(47,212,198,.08)}
+      .aiv-m .v{font:800 18px/1 'Sora',Inter,sans-serif;color:#eaf2ff;font-variant-numeric:tabular-nums}
+      .aiv-m.hl .v{color:#2fd4c6}
+      .aiv-m .l{font:600 9px/1.2 Inter;color:var(--ink-soft,#9fb0c6);margin-top:5px}
       .aiv-cap{margin:15px 2px 0;color:var(--ink-soft,#9fb0c6);font-size:13.5px;line-height:1.6}
       .aiv-cap b{color:#eaf2ff}
       </style>
@@ -178,6 +181,7 @@
               <div class="aiv-m"><div class="v" id="aivLat">53</div><div class="l">avg latency (ms) ↓</div></div>
               <div class="aiv-m"><div class="v" id="aivHit">0%</div><div class="l">habit hit-rate ↑</div></div>
               <div class="aiv-m"><div class="v" id="aivRules2">0</div><div class="l">rules learned</div></div>
+              <div class="aiv-m hl"><div class="v">91.3%</div><div class="l">Acc@3, held-out</div></div>
             </div>
           </div>
         </div>
